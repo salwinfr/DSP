@@ -22,7 +22,7 @@ void bit_reverse(double complex *x, int N) {
     int i, j, k;
     double complex temp;
     for (i = 1, j = 0; i < N; i++) {
-        for (k = N >> 1; k > (j ^= k); k >>= 1);
+        for (k = N >> 1; k > (j ^= k); k >>= 1) ;
         if (i < j) {
             temp = x[i];
             x[i] = x[j];
@@ -75,12 +75,20 @@ void ifft(double complex *x, int N) {
 }
 
 int main() {
-    int N = 8;
-    double complex x[8] = {0.0 + 0.0 * I, 1.0 + 0.0 * I, 2.0 + 0.0 * I, 3.0 + 0.0 * I, 4.0 + 0.0 * I, 5.0 + 0.0 * I, 6.0 + 0.0 * I, 7.0 + 0.0 * I};
-    
+    int N;
+    printf("Enter value of N:");
+    scanf("%d",&N);
+    double real;
+    double complex x[N];
+     for (int i = 0; i < N; i++) {
+        
+        printf("Enter the real part of x[%d]: ", i);
+        scanf("%lf", &real);
+        x[i] = real;
+    }
     // Perform FFT
     fft(x, N);
-    //ifft(x, N);
+    ifft(x, N);
     for (int i = 0; i < N; i++) {
         print_complex(x[i]);
     }

@@ -20,16 +20,17 @@ double complex twiddle_factor_2(int N) {
     return cos(angle) + I * sin(angle);
 }
 
-void bit_reverse(double complex *x, int N) {
-    int i, j, k;
+void bit_reverse(double complex *x,int N){
+    int i,j,k;
     double complex temp;
-    for (i = 1, j = 0; i < N; i++) {
-        for (k = N >> 1; k > (j ^= k); k >>= 1);
-        if (i < j) {
-            temp = x[i];
-            x[i] = x[j];
-            x[j] = temp;
-        }
+    for (i=1,j=0;i<N;i++){
+        for(k=N>>1;k>(j^=k);k>>=1);
+            if(i<j){
+                temp = x[i];
+                x[i]=x[j];
+                x[j]=temp;
+            }
+        
     }
 }
 
