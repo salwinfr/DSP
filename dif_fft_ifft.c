@@ -34,14 +34,10 @@ void bit_reverse(double complex *x, int N) {
 }
 
 void dif_fft(double complex *x, int N) {
-    int i = 1;
-    int s = 0;
-    while (i != N) {
-        i = i * 2;
-        s += 1;
-    }
+    
+    int s = log2(N);
 
-    for (; s >= 1; s--) { // Outer loop: stages
+    for (s; s >= 1; s--) { // Outer loop: stages
         int m = 1 << s; // m = 2^s
         int m2 = m >> 1; // m2 = m / 2
         double complex w_m = twiddle_factor(m); // Twiddle factor for the current stage
@@ -60,12 +56,8 @@ void dif_fft(double complex *x, int N) {
 }
 
 void dif_ifft(double complex *x, int N) {
-    int i = 1;
-    int s = 0;
-    while (i != N) {
-        i = i * 2;
-        s += 1;
-    }
+
+    int s = log2(N);
     for (; s >= 1; s--) { // Outer loop: stages
         int m = 1 << s; // m = 2^s
         int m2 = m >> 1; // m2 = m / 2

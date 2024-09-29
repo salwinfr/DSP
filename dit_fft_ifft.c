@@ -33,13 +33,8 @@ void bit_reverse(double complex *x, int N) {
 
 void fft(double complex *x, int N) {
     bit_reverse(x, N);
-    int i = 1;
-    int S = 0;
-    while (i != N) {
-        i = i * 2;
-        S += 1;
-    }
-    for (int s = 1; s <= S; s++) {
+
+    for (int s = 1; s <= log2(N); s++) {
         int m = 1 << s;
         int m2 = m >> 1;
         double complex w_m = twiddle_factor(m);
@@ -58,13 +53,8 @@ void fft(double complex *x, int N) {
 
 void ifft(double complex *x, int N) {
     bit_reverse(x, N);
-    int i = 1;
-    int S = 0;
-    while (i != N) {
-        i = i * 2;
-        S += 1;
-    }
-    for (int s = 1; s <= S; s++) {
+  
+    for (int s = 1; s <= log2(N); s++) {
         int m = 1 << s;
         int m2 = m >> 1;
         double complex w_m = twiddle_factor_2(m);
@@ -90,7 +80,7 @@ int main() {
     
     // Perform FFT
     fft(x, N);
-    ifft(x, N);
+    //ifft(x, N);
     for (int i = 0; i < N; i++) {
         print_complex(x[i]);
     }
