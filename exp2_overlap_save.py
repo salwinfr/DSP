@@ -1,24 +1,70 @@
 import numpy as np
+from numpy import *
+x=[1,2,3,4,5,6,7,8]
+h=[1,-1]
+N=4
+n1=len(x)
+M=len(h)
+L=N-M+1
+if(N!=M):
+  for i in range(M,N):
+    h.append(0)
 
-def overlap_save(signal, impulse_response, block_size):
-    num_blocks = len(signal) // block_size
-    output_signal = np.zeros(len(signal) + len(impulse_response) - 1)
+row_number=n1//L
+if((n1%L)==0):
+  row_number=n1//L 
+else:
+  row_number=n1//L +1
 
-    for i in range(num_blocks):
-        block = signal[i * block_size : (i + 1) * block_size]
-        padded_block = np.pad(block, (0, len(impulse_response) - 1), 'constant')
-        padded_impulse_response = np.pad(impulse_response, (0, len(padded_block) - len(impulse_response)), 'constant')
-        block_fft = np.fft.fft(padded_block)
-        impulse_response_fft = np.fft.fft(padded_impulse_response)
-        convolution_fft = block_fft * impulse_response_fft
-        convolution = np.fft.ifft(convolution_fft)
-        output_signal[i * block_size : i * block_size + len(convolution)] += convolution.real
+column_number=(M-1)+L
+X=np.zeros((row_number+1,column_number))
+k=0
+for i in range(0,row_number):
+  for j in range(M-1,column_number):
+    X[i][j]=x[k]
+    k=k+1
+    if(k==n1):
+      break
+if X[row_number-1][column_number-1]!=0:
+  
+  for j in range(0,M-1):
+     X[row_number-1+1][j]=x[n1-M+1+j]
+  
 
-    return output_signal
+for i in range(1,row_number):
+  for j in range (0,(M-1)):
+    if(X[i][j]==0):
+      X[i][j]=X[i-1][j+N-M+1]
 
-# Example usage
-signal = eval(input("Enter the input sequence: "))
-impulse_response = eval(input("Enter the impulse sequence: "))    
-block_size = 4
-output_signal = overlap_save(signal, impulse_response, block_size)
-print("Output signal:", output_signal)
+
+
+
+
+def find_cir_conv(x1,x2):
+    N1 = len(x1)
+    N2 = len(x2)
+    N =max([N1,N2])
+    
+    x1 = pad(x1, (0, N - len(x1)))
+    x2 = pad(x2, (0, N - len(x2)))
+    conv=zeros((N,N))
+
+    for i in range(N):
+        conv[:,i]=roll(x1,i)
+    result = dot(conv,x2)
+    return result
+
+output=[0]*((row_number+1)*column_number)
+for i in range(0,row_number+1):
+   output[i]=find_cir_conv(X[i],h)
+    
+count=0
+y=[0]*(25)
+for i in range(0,row_number+1):
+  for j in range(M-1,column_number):
+    y[count]=output[i][j]
+    count=count+1
+    
+
+y = [int(x) for x in y]
+print("output is:",y[0:n1+M-1])

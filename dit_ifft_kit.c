@@ -58,10 +58,12 @@ void bit_reverse(complex *x, int N) {
 
 void fft(complex *x, int N) {
     bit_reverse(x, N);
-   int S = 0;
-    for (int i = N; i > 1; i >>= 1) {
-        S++;
-    }
+    int i=1;
+    	int S=0;
+    	while(i!=N){
+    		i=i*2;
+    		S+=1;
+    	}
     	int s;
     for (s = 1; s <= S; s++) {
         int m = 1 << s;
@@ -119,13 +121,22 @@ void ifft(complex *x, int N) {
 int main() {
     int N = 8;
     complex x[8] = {{0.0, 0.0}, {1.0, 0.0}, {2.0, 0.0}, {3.0, 0.0}, {4.0, 0.0}, {5.0, 0.0}, {6.0, 0.0}, {7.0, 0.0}};
-    // bit_reverse(x, N);
-    fft(x, N);
-    ifft(x, N);
+    printf("INPUT SEQUENCE :\n");
     int i;
-    for (i = 0; i < N; i++) {
+       for (i = 0; i < N; i++) {
         print_complex(x[i]);
     }
 
+    fft(x, N);
+    printf("FFT :\n");
+       for (i = 0; i < N; i++) {
+        print_complex(x[i]);
+    }
+
+    ifft(x, N);
+    printf("IFFT :\n");
+       for (i = 0; i < N; i++) {
+        print_complex(x[i]);
+    }
     return 0;
 }

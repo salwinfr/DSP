@@ -1,12 +1,21 @@
+from numpy import *
 from matplotlib.pyplot import *
-import numpy as np
 def dft_matrix(N):
-    n = np.arange(N)
-    k = 0
-    print(k)
-    omega = np.exp(-2j * np.pi * k * n / N)
-    print(np.shape(omega))
+    n = arange(N)
+    k = n[:, None]
+
+    omega = exp(-2j*k*pi*n/N)
+    print(omega)
     return omega
-N = 4
-VN = dft_matrix(N)
-print(VN)
+N = int(input("Enter the value: "))
+dft = dft_matrix(N)
+figure(figsize=(12,6))
+subplot(1,2,1)
+title(f"real values of DFT with N={N}")
+imshow(real(dft))
+colorbar()
+subplot(1,2,2)
+title(f"imaginary values of DFT with N={N}")
+imshow(imag(dft))
+colorbar()
+show()

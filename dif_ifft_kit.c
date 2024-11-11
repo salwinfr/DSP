@@ -57,10 +57,12 @@ void bit_reverse(complex *x, int N) {
 }
 
 void dif_fft(complex *x, int N) {
-   int s = 0;
-    for (int i = N; i > 1; i >>= 1) {
-        s++;
-    }
+	int i=1;
+	int s=0;
+	while(i!=N){
+		i=i*2;
+		s+=1;
+	}
 
     for (s; s >= 1; s--) { // Outer loop: stages
         int m = 1 << s; // m = 2^s
@@ -78,7 +80,6 @@ void dif_fft(complex *x, int N) {
                 w = mul(w, w_m); // Update w for the next butterfly
             }
         }
-    
     }
     bit_reverse(x, N); // Bit-reverse the output
 }
@@ -116,13 +117,22 @@ void dif_ifft(complex *x, int N) {
 int main() {
     int N = 8;
     complex x[8] = {{0.0, 0.0}, {1.0, 0.0}, {2.0, 0.0}, {3.0, 0.0}, {4.0, 0.0}, {5.0, 0.0}, {6.0, 0.0}, {7.0, 0.0}};
-    // bit_reverse(x, N);
-    dif_fft(x, N);
-    dif_ifft(x, N);
+   printf("INPUT SEQUENCE :\n");
     int i;
-    for (i = 0; i < N; i++) {
+       for (i = 0; i < N; i++) {
         print_complex(x[i]);
     }
 
+    dif_fft(x, N);
+    printf("FFT :\n");
+       for (i = 0; i < N; i++) {
+        print_complex(x[i]);
+    }
+
+    dif_ifft(x, N);
+    printf("IFFT :\n");
+       for (i = 0; i < N; i++) {
+        print_complex(x[i]);
+    }
     return 0;
 }
