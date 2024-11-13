@@ -1,47 +1,36 @@
-from matplotlib.pyplot import *
-import numpy as np
 import time
+import numpy as np
+import matplotlib.pyplot as plt
 
-def dft_matrix(N):
-    
-    n = np.arange(N)
-   
-    k = n.reshape((N, 1))
-    
-    omega = np.exp(-2j * np.pi * k * n / N)
- 
-    return omega
+def dft_matrix_create(N):
+    dft_matrix = np.zeros((N, N), dtype=complex)
+    for x in range(N):
+        for y in range(N):
+            dft_matrix[x, y] = np.exp(-2j * np.pi * x * y / N)
+    return dft_matrix
 
-def compute_dft(sequence):
-    N = len(sequence)
-    VN = dft_matrix(N)
-    
-  
-gammas = range(2, 11)
-dft_times = []
-fft_times = []
-
-for gamma in gammas:
-    N = 2 ** gamma
-    
-    sequence = np.random.rand(N)
-    
-    # Measure DFT time
+N = [4, 8, 16, 32, 64, 256, 512,1024]
+computation_method = []
+computation_automated = []
+for i in N:
+    print(i)
+    vx = np.random.randn(i)
     start_time = time.time()
-    compute_dft(sequence)
+    a = dft_matrix_create(i)
+    np.matmul(a, vx)
     end_time = time.time()
-    dft_times.append(end_time - start_time)
-    
-    # Measure FFT time
-    start_time = time.time()
-    np.fft.fft(sequence)
-    end_time = time.time()
-    fft_times.append(end_time - start_time)
-figure(figsize=(10, 6))
-plot(gammas, dft_times, label='DFT Computation Time', marker='o')
-plot(gammas, fft_times, label='FFT Computation Time', marker='x')
-xlabel('γ')
-ylabel('Time (seconds)')
-title('Computation Time for DFT and FFT')
-legend()
-show()
+    computation_time_method = end_time - start_time
+    start_fft_time = time.time()
+    b = np.fft.fft(vx)
+    end_fft_time = time.time()
+    computation_time_automated = end_fft_time - start_fft_time
+    computation_method.append(computation_time_method)
+    computation_automated.append(computation_time_automated)
+
+plt.plot(N, computation_method, label='Manual Fourier Transform')
+plt.plot(N, computation_automated, label='Fast Fourier Transform')
+plt.xlabel('N')
+plt.ylabel('Time (seconds)')
+plt.legend()
+plt.grid()
+plt.show()
