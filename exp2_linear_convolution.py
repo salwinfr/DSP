@@ -1,16 +1,20 @@
-from numpy import *
-from matplotlib.pyplot import *
-def find_lin_conv(x1,x2):
-    N1 = len(x1)
-    N2 = len(x2)
-    N = N1+N2-1
-    y = zeros(N)
-    for n in range(N):
-        for k in range(N1):
-            if n-k>=0 and n-k<N2:
-                y[n] += x1[k]*x2[n-k]
-    return y
-x1 = eval(input("Enter the input sequence: "))
-x2 = eval(input("Enter the impulse sequence: "))
-y = find_lin_conv(x1,x2)
-print("y(n)=",y)
+#LINEAR CONVOLUTION
+import numpy as np
+a = "yes"
+while a.lower() == "yes":
+    def linear_convo(x, h):  # Indented this block under the while loop
+        l1 = len(x)
+        l2 = len(h)
+        y = np.zeros(l1 + l2 - 1)
+        for i in range(l1 + l2 - 1):
+            y[i] = 0
+            for j in range(l1):
+                if i - j >= 0 and i - j < l2:
+                    y[i] += x[j] * h[i - j]
+        return y
+
+    x = list(eval(input("Enter the elements in x[n]:")))
+    h = list(eval(input("Enter the elements in h[n]:")))
+    y = linear_convo(x, h)
+    print("Linear convolution result= ", y)
+    a = input("Do you want to continue?yes/no: ")
